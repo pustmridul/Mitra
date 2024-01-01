@@ -15,6 +15,8 @@ namespace Mitra.Domain
 
         }
         public DbSet<Item> Items { get; set; }
+        public DbSet<EventCategory> EventCategories { get; set; }
+        public DbSet<Event> Events { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
