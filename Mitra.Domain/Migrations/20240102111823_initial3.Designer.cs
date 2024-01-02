@@ -12,8 +12,8 @@ using Mitra.Domain;
 namespace Mitra.Domain.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240101174558_initial")]
-    partial class initial
+    [Migration("20240102111823_initial3")]
+    partial class initial3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,12 +39,12 @@ namespace Mitra.Domain.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("EventAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EventDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("EventName")
                         .IsRequired()
@@ -52,6 +52,9 @@ namespace Mitra.Domain.Migrations
 
                     b.Property<int>("EventcategoryId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -78,9 +81,8 @@ namespace Mitra.Domain.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ParentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

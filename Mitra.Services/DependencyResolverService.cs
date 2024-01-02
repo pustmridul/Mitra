@@ -18,6 +18,8 @@ namespace Mitra.Services
             services.AddSingleton(mapper);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<IEventCategoryService, EventCategoryService>();
+            services.AddTransient<IEventService, EventService>();
             return services;
         }
     }

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mitra.Domain.Entity
+namespace Mitra.Services.Dtos
 {
-    public class EventCategory:BaseEntity
+    public  class EventCategoryDTO
     {
+        //public int Id { get; set; }
         public string CategoryName { get; set; }
         public int ParentId { get; set; }
-        public ICollection<Event> Events { get; set; }
+       
     }
 }
