@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -8,17 +7,14 @@ using Mitra.Domain;
 using Mitra.Domain.Entity;
 using Mitra.Services.Dtos;
 using Mitra.Services.Interface;
-using System;
-using System.Collections.Generic;
+
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Azure;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
+
+
 
 namespace Mitra.Services.Services
 {
@@ -27,14 +23,16 @@ namespace Mitra.Services.Services
         private IMapper _mapper;
         private AppDbContext _db;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IMapper mapper,AppDbContext appDbContext,IConfiguration configuration)
+        public UserService(IMapper mapper,AppDbContext appDbContext,IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _db = appDbContext;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
-        public HttpContext context;
+       
         public async Task<string> Login(UserDTO userDto)
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
@@ -112,15 +110,23 @@ namespace Mitra.Services.Services
             return refreshToken;
         }
 
+
+
         private void SetRefreshToken(User user, RefreshToken newRefreshToken)
         {
-            
-            var cookiesOptions = new CookieOptions
+
+            var context = _httpContextAccessor.HttpContext;
+
+            if (context != null)
             {
-                HttpOnly = true,
-                Expires = newRefreshToken.Expires,
-            };
-            context.Response.Cookies.Append("refreshToken", newRefreshToken.Token);
+                var cookiesOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Expires = newRefreshToken.Expires,
+                };
+
+                context.Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookiesOptions);
+            }
             user.RefreshToken = newRefreshToken.Token;
             user.TokenCreated = newRefreshToken.Created;
             user.TokenExpires = newRefreshToken.Expires;

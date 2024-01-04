@@ -43,6 +43,7 @@ namespace Mitra.API.Controllers
 
 
         }
+   
 
         [HttpPost("login")]
         public async Task<ActionResult<object>> login(UserDTO userDto)
@@ -61,7 +62,7 @@ namespace Mitra.API.Controllers
         }
 
         [HttpPost("refresh-token")]
-        public async Task<ActionResult<string>> RefreshToken(HttpContext context)
+        public async Task<ActionResult<string>> RefreshToken()
         {
             var refresh = Request.Cookies["refreshToken"];
             var token = await _user.RefreashToken(refresh);
@@ -88,7 +89,7 @@ namespace Mitra.API.Controllers
         //        HttpOnly = true,
         //        Expires = newRefreshToken.Expires,
         //    };
-        //    Response.Cookies.Append("refreshToken", newRefreshToken.Token);
+        //    Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookiesOptions);
         //    user.RefreshToken = newRefreshToken.Token;
         //    user.TokenCreated = newRefreshToken.Created;
         //    user.TokenCreated = newRefreshToken.Expires;

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -25,7 +27,10 @@ namespace Mitra.Services
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<IEventCategoryService, EventCategoryService>();
             services.AddTransient<IEventService, EventService>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserService, UserService>();
+
 
             services.AddSwaggerGen(options =>
             {
