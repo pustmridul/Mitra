@@ -21,7 +21,15 @@ namespace Mitra.Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+
+            // Configure relationships
+            modelBuilder.Entity<EventCategory>()
+                .HasMany(e => e.Events)
+                .WithOne(vd => vd.Category)
+                .HasForeignKey(vd => vd.EventcategoryId);
+
+
+            //base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -15,5 +15,6 @@ namespace Mitra.Domain.Entity
         public int EventcategoryId { get; set; }
 
         public EventCategory Category { get; set; }
+        
     }
 }
