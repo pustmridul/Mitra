@@ -18,6 +18,7 @@ namespace Mitra.Domain
         public DbSet<EventCategory> EventCategories { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Donor> Donors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,8 +26,13 @@ namespace Mitra.Domain
             // Configure relationships
             modelBuilder.Entity<EventCategory>()
                 .HasMany(e => e.Events)
-                .WithOne(vd => vd.Category)
+                .WithOne(vd => vd.EventCategory)
                 .HasForeignKey(vd => vd.EventcategoryId);
+
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.Donors)
+                .WithOne(vd => vd.User)
+                .HasForeignKey(vd => vd.userId);
 
 
             //base.OnModelCreating(modelBuilder);

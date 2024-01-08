@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Mitra.Domain.Entity
 {
-    internal class Donor
+    public class Donor: BaseEntity
     {
+        public string Name { get; set; }
+        public string MobileNumber { get; set; }
+        public string Address { get; set; }
+        public int userId {  get; set; }
+
+        public User User { get; set; }
     }
 }

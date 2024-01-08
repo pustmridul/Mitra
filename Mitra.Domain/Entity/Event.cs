@@ -14,7 +14,6 @@ namespace Mitra.Domain.Entity
         public DateTime EndDate { get;  set; }
         public int EventcategoryId { get; set; }
 
-        public EventCategory Category { get; set; }
-        
+        public EventCategory EventCategory { get; set; }
     }
 }

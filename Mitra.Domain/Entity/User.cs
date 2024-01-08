@@ -15,5 +15,7 @@ namespace Mitra.Domain.Entity
         public DateTime  TokenCreated { get; set; }
         public DateTime  TokenExpires { get; set; }
 
+        public ICollection<Donor> Donors {  get; set; }
+
     }
 }

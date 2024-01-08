@@ -22,6 +22,42 @@ namespace Mitra.Domain.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Mitra.Domain.Entity.Donor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreateByText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MobileNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("Donors");
+                });
+
             modelBuilder.Entity("Mitra.Domain.Entity.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -151,20 +187,36 @@ namespace Mitra.Domain.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Mitra.Domain.Entity.Donor", b =>
+                {
+                    b.HasOne("Mitra.Domain.Entity.User", "User")
+                        .WithMany("Donors")
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Mitra.Domain.Entity.Event", b =>
                 {
-                    b.HasOne("Mitra.Domain.Entity.EventCategory", "Category")
+                    b.HasOne("Mitra.Domain.Entity.EventCategory", "EventCategory")
                         .WithMany("Events")
                         .HasForeignKey("EventcategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("EventCategory");
                 });
 
             modelBuilder.Entity("Mitra.Domain.Entity.EventCategory", b =>
                 {
                     b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("Mitra.Domain.Entity.User", b =>
+                {
+                    b.Navigation("Donors");
                 });
 #pragma warning restore 612, 618
         }
