@@ -12,7 +12,7 @@ using Mitra.Domain;
 namespace Mitra.Domain.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240108175614_initial")]
+    [Migration("20240109052605_initial")]
     partial class initial
     {
         /// <inheritdoc />

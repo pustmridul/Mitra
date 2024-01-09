@@ -20,6 +20,7 @@ namespace Mitra.Domain
         public DbSet<User> Users { get; set; }
         public DbSet<Donor> Donors { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -35,7 +36,30 @@ namespace Mitra.Domain
                 .HasForeignKey(vd => vd.userId);
 
 
-            //base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Donation>(entity =>
+            {
+                // Configure primary key
+                entity.HasKey(d => d.Id);
+
+                // Configure Amount property
+                entity.Property(d => d.Amount)
+                    .HasColumnType("decimal(18,2)"); // Adjust the precision and scale as needed
+
+                // Configure foreign key relationships
+                entity.HasOne(d => d.Event)
+                    .WithMany(e => e.Donations)
+                    .HasForeignKey(d => d.EventId)
+                    .OnDelete(DeleteBehavior.Restrict); // or Cascade, SetNull, etc. based on your requirements
+
+                entity.HasOne(d => d.Donor)
+                    .WithMany(donor => donor.Donations)
+                    .HasForeignKey(d => d.DonorId)
+                    .OnDelete(DeleteBehavior.Restrict); // or Cascade, SetNull, etc. based on your requirements
+            });
+
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
