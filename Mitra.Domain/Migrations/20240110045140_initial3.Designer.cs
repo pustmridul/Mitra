@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mitra.Domain;
 
@@ -11,9 +12,11 @@ using Mitra.Domain;
 namespace Mitra.Domain.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240110045140_initial3")]
+    partial class initial3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,9 +44,6 @@ namespace Mitra.Domain.Migrations
 
                     b.Property<int>("DonorId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("EventDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
@@ -157,38 +157,6 @@ namespace Mitra.Domain.Migrations
                     b.ToTable("EventCategories");
                 });
 
-            modelBuilder.Entity("Mitra.Domain.Entity.Expectation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("CreateByText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DonorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DonorId");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("Expectations");
-                });
-
             modelBuilder.Entity("Mitra.Domain.Entity.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -295,37 +263,14 @@ namespace Mitra.Domain.Migrations
                     b.Navigation("EventCategory");
                 });
 
-            modelBuilder.Entity("Mitra.Domain.Entity.Expectation", b =>
-                {
-                    b.HasOne("Mitra.Domain.Entity.Donor", "Donor")
-                        .WithMany("Expectations")
-                        .HasForeignKey("DonorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Mitra.Domain.Entity.Event", "Event")
-                        .WithMany("Expectations")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Donor");
-
-                    b.Navigation("Event");
-                });
-
             modelBuilder.Entity("Mitra.Domain.Entity.Donor", b =>
                 {
                     b.Navigation("Donations");
-
-                    b.Navigation("Expectations");
                 });
 
             modelBuilder.Entity("Mitra.Domain.Entity.Event", b =>
                 {
                     b.Navigation("Donations");
-
-                    b.Navigation("Expectations");
                 });
 
             modelBuilder.Entity("Mitra.Domain.Entity.EventCategory", b =>

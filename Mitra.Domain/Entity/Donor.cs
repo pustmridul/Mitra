@@ -14,5 +14,6 @@ namespace Mitra.Domain.Entity
         public int userId {  get; set; }
         public User User { get; set; }
         public ICollection<Donation> Donations { get; set; }
+        public ICollection<Expectation> Expectations { get; set; }
     }
 }

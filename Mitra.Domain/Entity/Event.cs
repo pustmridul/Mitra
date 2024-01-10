@@ -16,5 +16,6 @@ namespace Mitra.Domain.Entity
 
         public EventCategory EventCategory { get; set; }
         public ICollection<Donation> Donations { get; set; }
+        public ICollection<Expectation> Expectations { get;}
     }
 }

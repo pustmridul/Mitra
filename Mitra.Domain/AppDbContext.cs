@@ -19,6 +19,8 @@ namespace Mitra.Domain
         public DbSet<Event> Events { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Donor> Donors { get; set; }
+        public DbSet<Donation> Donations { get; set; }
+        public DbSet<Expectation> Expectations { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,6 +58,24 @@ namespace Mitra.Domain
                     .WithMany(donor => donor.Donations)
                     .HasForeignKey(d => d.DonorId)
                     .OnDelete(DeleteBehavior.Restrict); // or Cascade, SetNull, etc. based on your requirements
+            });
+
+            modelBuilder.Entity<Expectation>(entity =>
+            {
+                entity.HasKey(d => d.Id);
+
+                entity.Property(d => d.Amount)
+                       .HasColumnType("decimal(18,2)");
+
+                entity.HasOne(d => d.Event)
+                    .WithMany(e => e.Expectations)
+                    .HasForeignKey(d => d.EventId)
+                    .OnDelete(DeleteBehavior.Restrict); // or Cascade, SetNull, etc. based on your requirements
+
+                entity.HasOne(d => d.Donor)
+                    .WithMany(donor => donor.Expectations)
+                    .HasForeignKey(d => d.DonorId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
 

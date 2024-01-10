@@ -18,7 +18,8 @@ namespace Mitra.API.Controllers
             _donationService = donationService;
         }
 
-        public async Task<ActionResult<object>> AddDonatio(DonationDto donationDto)
+        [HttpPost]
+        public async Task<ActionResult<object>> AddDonation(DonationDto donationDto)
         {
             try
             {
@@ -28,6 +29,8 @@ namespace Mitra.API.Controllers
             catch (Exception ex)
             {
                 _responseDto.IsSuccess = false;
+                _responseDto.ErrorMessages
+                    = new List<string>() { ex.ToString() };
             }
             return _responseDto;
         }

@@ -31,6 +31,7 @@ namespace Mitra.Services
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IDonorService, DonorService>();
+            services.AddTransient<IDonationService, DonationService>();
 
 
             services.AddSwaggerGen(options =>
