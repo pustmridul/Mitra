@@ -23,6 +23,8 @@ namespace Mitra.Services
                 config.CreateMap<DonorDto, Donor>().ReverseMap();
                 config.CreateMap<Donation, DonationDto>().ReverseMap();
                 config.CreateMap<DonationDto, Donation>().ReverseMap();
+                config.CreateMap<Expectation, ExpectationDto>().ReverseMap();
+                config.CreateMap<ExpectationDto, Expectation>().ReverseMap();
             });
 
             return mappingConfig;

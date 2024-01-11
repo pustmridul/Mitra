@@ -12,10 +12,29 @@ namespace Mitra.API.Controllers
         protected ResponseDto _responseDto;
         private IExpectationService _expectationService;
 
-        public ExpectationController(ResponseDto responseDto, IExpectationService expectationService)
+        public ExpectationController( IExpectationService expectationService)
         {
-            _responseDto = responseDto;
+            this._responseDto = new ResponseDto();
             _expectationService = expectationService;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<object>> AddExpectation(ExpectationDto expectationDto)
+        {
+            try
+            {
+                var ressult = await _expectationService.AddExpectation(expectationDto);
+                _responseDto.Result = ressult;
+
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.ErrorMessages = new List<string> { ex.Message };   
+
+            }
+
+            return _responseDto;
         }
 
 
