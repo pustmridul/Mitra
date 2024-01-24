@@ -1,4 +1,5 @@
-﻿using Mitra.Services.Dtos;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Mitra.Services.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,10 @@ namespace Mitra.Services.Interface
 {
     public  interface IEventCategoryService
     {
-        Task<IEnumerable<EventCategoryDTO>> GetAllEventCategory();
+        //Task<IEnumerable<EventCategoryDTO>> GetAllEventCategory(int page, int pageSize);
+        Task<IPaginatedResponse<EventCategoryListDTO>> GetAllEventCategory(int page, int pageSize);
         Task<List<EventCategoryDTO>> AddEventCategory(EventCategoryDTO eventCategoryDTO);
-        Task<EventCategoryDTO?> GetEventCategoryById(int id);
+        Task<EventCategoryListDTO?> GetEventCategoryById(int id);
         Task<List<EventCategoryDTO>> UpdateEventCategory(int id, EventCategoryDTO requst);
         Task<List<EventCategoryDTO>> DeleteEventCategory(int id);
 

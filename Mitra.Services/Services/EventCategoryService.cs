@@ -54,23 +54,95 @@ namespace Mitra.Services.Services
 
         }
 
-       
 
 
-        public async Task<IEnumerable<EventCategoryDTO>> GetAllEventCategory()
+
+        //public async Task<IEnumerable<EventCategoryDTO>> GetAllEventCategory(int skip, int take)
+        //{
+
+        //    //List<EventCategory> eventCategories = await _db.EventCategories.ToListAsync();
+        //    //return _mapper.Map<List<EventCategoryDTO>>(eventCategories);
+        //    try
+        //    {
+        //        // Ensure skip and take are within valid bounds
+        //        skip = Math.Max(skip, 0);
+        //        take = Math.Max(take, 0);
+        //        var totalRecords = _db.EventCategories.Count();
+        //        // Retrieve the paginated data from your data source
+        //        var eventCategories = await _db.EventCategories
+        //            .Skip(skip)
+        //            .Take(take)
+        //            .ToListAsync();
+
+        //        // You may need to map your entity model to DTO as needed
+
+        //        var eventCategoriesDTO = _mapper.Map<IEnumerable<EventCategoryDTO>>(eventCategories);
+
+        //        return eventCategoriesDTO;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle exceptions appropriately (e.g., log, rethrow, etc.)
+        //        throw new ("Error retrieving paginated event categories", ex);
+        //    }
+        //}
+
+        public class PaginatedResponse<T> : IPaginatedResponse<T>
         {
-            List<EventCategory> eventCategories = await _db.EventCategories.ToListAsync();
-            return _mapper.Map<List<EventCategoryDTO>>(eventCategories);
+            public IEnumerable<T> Data { get; set; }
+            public int TotalRecords { get; set; }
+        }
+        public async Task<IPaginatedResponse<EventCategoryListDTO>> GetAllEventCategory(int skip, int take)
+        {
+            try
+            {
+                // Ensure skip and take are within valid bounds
+                skip = Math.Max(skip, 0);
+                take = Math.Max(take, 0);
+
+                var totalRecords = await GetTotalEventCategoryCount(); // Assume you have a method to get the total count
+                var eventCategories = await GetPaginatedEventCategories(skip, take);
+
+                var response = new PaginatedResponse<EventCategoryListDTO>
+                {
+                    Data = eventCategories,
+                    TotalRecords = totalRecords
+                };
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions appropriately (e.g., log, rethrow, etc.)
+                throw new Exception("Error retrieving paginated event categories", ex);
+            }
         }
 
-        public async Task<EventCategoryDTO?> GetEventCategoryById(int id)
+        private async Task<int> GetTotalEventCategoryCount()
+        {
+            // Implement logic to get the total count of EventCategory items
+            return await _db.EventCategories.CountAsync();
+        }
+
+        private async Task<IEnumerable<EventCategoryListDTO>> GetPaginatedEventCategories(int skip, int take)
+        {
+            // Implement logic to get paginated EventCategoryDTO items
+            return await _db.EventCategories
+                .Skip(skip)
+                .Take(take)
+                .Select(eventCategory => _mapper.Map<EventCategoryListDTO>(eventCategory))
+                .ToListAsync();
+        }
+
+
+        public async Task<EventCategoryListDTO?> GetEventCategoryById(int id)
         {
             var eventCategory = await _db.EventCategories.FindAsync(id);
 
             if (eventCategory == null)
                 return null;
 
-            var eventCategoryDTO = _mapper.Map<EventCategoryDTO>(eventCategory);
+            var eventCategoryDTO = _mapper.Map<EventCategoryListDTO>(eventCategory);
 
             return eventCategoryDTO;
         }

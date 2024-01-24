@@ -33,6 +33,7 @@ namespace Mitra.Services
             services.AddTransient<IDonorService, DonorService>();
             services.AddTransient<IDonationService, DonationService>();
             services.AddTransient<IExpectationService, ExpectationService>();
+            services.AddCors();
 
 
             services.AddSwaggerGen(options =>

@@ -135,6 +135,12 @@ namespace Mitra.Services.Services
 
         public async Task<List<UserDTO>> RegisterUser(UserDTO userDto)
         {
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
+
+            if (user.Username == userDto.Username)
+            {
+                return new List<UserDTO> { new UserDTO { ErrorMessage = "User already exists" } };
+            }
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(userDto.PasswordHash);
             var users = _mapper.Map<User>(userDto);
 
