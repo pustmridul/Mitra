@@ -25,25 +25,21 @@ namespace Mitra.API.Controllers
 
 
         [HttpGet]
-       // public async Task<ActionResult<object>> Get()
         public async Task<object> Get(int page, int pageSize)
         {
-            //var response = new ResponseDto();
             try
             {
-                //IEnumerable<EventCategory> eventCategory = await _eventCategoryService.GetAllEventCategory();
-                //_responseDto.Result = eventCategory;
-
-                // Calculate the number of items to skip based on the page number and page size
+               
                 int skip = (page - 1) * pageSize;
-                //IEnumerable<EventCategoryDTO> eventCategories = await _eventCategoryService.GetAllEventCategory(skip, pageSize);
+                
 
                 var paginatedResponse = await _eventCategoryService.GetAllEventCategory(skip, pageSize);
 
-                // Set the Result, Count, and IsSuccess properties in the response
+               
                 _response.Result = paginatedResponse.Data;
                 _response.Count = paginatedResponse.TotalRecords;
                 _response.IsSuccess = true;
+                _response.DisplayMessage = "Load ALL Data";
             }
             catch (Exception ex)
             {
@@ -84,6 +80,22 @@ namespace Mitra.API.Controllers
             }
             return _response;
         }
+
+        [HttpDelete]
+        public async Task<ActionResult<object>> DeleteEventCategory(int eventId)
+        {
+            try
+            {
+                var result = await _eventCategoryService.DeleteEventCategory(eventId);  
+                _response.Result = result;
+                _response.DisplayMessage = "Delete Successgully";
+            }
+            catch(Exception ex)
+            {
+                _response.IsSuccess=false;  
+            }
+            return _response;
+        }
         
         [HttpPut("{id}")]
         public async Task<ActionResult<object>> UpdateEventCategory(int id, EventCategoryDTO eventCategoryDTO)
@@ -92,6 +104,8 @@ namespace Mitra.API.Controllers
             {
                 var result = await _eventCategoryService.UpdateEventCategory(id, eventCategoryDTO);
                 _response.Result = result;
+                _response.DisplayMessage = "DATA ADDED or UPDATE Sucessfully";
+               
             }
             catch( Exception ex)
             { 

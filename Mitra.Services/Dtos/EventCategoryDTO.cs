@@ -8,9 +8,9 @@ namespace Mitra.Services.Dtos
 {
     public  class EventCategoryDTO
     {
-        //public int Id { get; set; }
-        public string CategoryName { get; set; }
-        public int ParentId { get; set; }
+       // public int Id { get; set; }
+        public string categoryName { get; set; }
+        public int parentId { get; set; }
        
     }
 }
