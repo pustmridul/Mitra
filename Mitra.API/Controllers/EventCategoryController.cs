@@ -50,6 +50,27 @@ namespace Mitra.API.Controllers
             return _response;
         }
 
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<object>> GetAll()
+        {
+            try
+            {
+                List<EventCategoryListDTO> eventCatList = await _eventCategoryService.GetAllEventCategory();
+
+                _response.Result = eventCatList;
+
+                _response.DisplayMessage = "Load ALL Data";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages
+                     = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+
+
         [HttpPost]
         public async Task<ActionResult<object>> CreateEventCategory(EventCategoryDTO eventCategoryDTO)
         {

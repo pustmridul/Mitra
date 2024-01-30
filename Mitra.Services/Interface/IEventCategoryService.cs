@@ -10,7 +10,7 @@ namespace Mitra.Services.Interface
 {
     public  interface IEventCategoryService
     {
-        //Task<IEnumerable<EventCategoryDTO>> GetAllEventCategory(int page, int pageSize);
+        Task<List<EventCategoryListDTO>> GetAllEventCategory();
         Task<IPaginatedResponse<EventCategoryListDTO>> GetAllEventCategory(int page, int pageSize);
         Task<List<EventCategoryDTO>> AddEventCategory(EventCategoryDTO eventCategoryDTO);
         Task<EventCategoryListDTO?> GetEventCategoryById(int id);

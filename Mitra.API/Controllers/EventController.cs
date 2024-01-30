@@ -20,15 +20,15 @@ namespace Mitra.API.Controllers
             _eventService = eventService;
         }
         [HttpGet]
-        public async Task<ActionResult<object>>  GetEvent()
+        public async Task<ActionResult<object>> GetEvent()
         {
             try
             {
-                IEnumerable<EventDTO> events =  await _eventService.GetAllEvent();
+                IEnumerable<EventDTO> events = await _eventService.GetAllEvent();
                 _responseDto.Result = events;
-                
+
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.ErrorMessages
@@ -58,6 +58,42 @@ namespace Mitra.API.Controllers
                 _responseDto.ErrorMessages = new List<string> { ex.ToString() };
             }
             return _responseDto;
+        }
+
+        [HttpGet("GetAllEvent")]
+        public async Task<ActionResult<object>> GetAllEvent(int page, int pageSize)
+        {
+            try
+            {
+                int skip = (page - 1) * pageSize;
+                var result = await _eventService.GetEvents(page, pageSize);
+                _responseDto.Count = result.TotalRecords;
+                _responseDto.Result = result.Data;
+                _responseDto.IsSuccess = true;
+                _responseDto.DisplayMessage = "Load ALL Data";
+
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+            }
+            return _responseDto;
+        }
+
+        [HttpGet("GetById")]
+        public async Task<ActionResult<object>> GetById(int eventId)
+        {
+            try
+            {
+                var data = await _eventService.GetById(eventId);
+                _responseDto.Result = data;
+            }
+            catch(Exception ex)
+            { 
+                _responseDto.IsSuccess = false;
+            }
+            return _responseDto;
+
         }
 
 

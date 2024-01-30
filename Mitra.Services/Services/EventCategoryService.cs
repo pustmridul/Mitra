@@ -138,5 +138,10 @@ namespace Mitra.Services.Services
             return updatedEventCategories;
         }
 
+        public async Task<List<EventCategoryListDTO>> GetAllEventCategory()
+        {
+            List<EventCategory> datalist = await _db.EventCategories.ToListAsync();
+            return _mapper.Map<List<EventCategoryListDTO>>(datalist);
+        }
     }
 }

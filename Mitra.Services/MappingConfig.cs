@@ -16,7 +16,9 @@ namespace Mitra.Services
                 config.CreateMap<EventCategory, EventCategoryDTO>().ReverseMap();
                 config.CreateMap<EventCategoryDTO, EventCategory>().ReverseMap();
                 config.CreateMap<Event,EventDTO>().ReverseMap();
-                config.CreateMap<EventDTO,Event>().ReverseMap();
+                config.CreateMap<EventDTO,Event>().
+                ReverseMap();
+                config.CreateMap<Event, EventListDto>().ReverseMap();
                 config.CreateMap<User, UserDTO>().ReverseMap(); 
                 config.CreateMap<UserDTO, User>().ReverseMap();
                 config.CreateMap<Donor,DonorDto>().ReverseMap();
