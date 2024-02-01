@@ -19,11 +19,11 @@ namespace Mitra.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<object>> AddDonor(DonorDto donorDto)
+        public async Task<ActionResult<object>> AddDonor(int id, DonorDto donorDto)
         {
             try
             {
-                var result = await _donorService.AddDonor(donorDto);
+                var result = await _donorService.AddDonor(id, donorDto);
                 _responseDto.Result = result;    
 
             }

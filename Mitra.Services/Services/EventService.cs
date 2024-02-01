@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using Mitra.Domain;
 using Mitra.Domain.Entity;
@@ -26,10 +27,21 @@ namespace Mitra.Services.Services
             _db = context;
         }
 
-        public async Task<List<EventDTO>> AddEvents(EventDTO eventDTO)
+        public async Task<List<EventDTO>> AddEvents(int id, EventDTO eventDTO)
         {
-            var events = _mapper.Map<Event>(eventDTO);
-            _db.Add(events);
+            var res = await _db.Events.FindAsync(id);
+            if(res is null)
+            {
+                var eventss = _mapper.Map<Event>(eventDTO);
+                _db.Add(eventss);
+                await _db.SaveChangesAsync();
+            }
+            //var events = _mapper.Map<Event>(eventDTO);
+
+            //_db.Add(events);
+            //await _db.SaveChangesAsync();
+            _mapper.Map(eventDTO, res);
+
             await _db.SaveChangesAsync();
 
             var newEvents = await _db.Events
@@ -135,6 +147,22 @@ namespace Mitra.Services.Services
 
             return eventCategoryDto;
 
+        }
+
+        public async Task<List<EventDTO>> DeleteById(int id)
+        {
+            var eventsss = await _db.Events.FindAsync(id);
+            if (eventsss is null)
+
+                return null;
+            _db.Events.Remove(eventsss);
+            await _db.SaveChangesAsync();
+
+            var updatedEvent = await _db.Events
+               .ProjectTo<EventDTO>(_mapper.ConfigurationProvider)
+               .ToListAsync();
+
+            return updatedEvent;
         }
 
         //    var query = from e in _db.Events

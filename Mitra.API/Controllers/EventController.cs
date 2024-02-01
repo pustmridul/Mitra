@@ -45,11 +45,11 @@ namespace Mitra.API.Controllers
         //}
 
         [HttpPost]
-        public async Task<ActionResult<object>> CreateEvent(EventDTO eventDTO)
+        public async Task<ActionResult<object>> CreateEvent(int id,EventDTO eventDTO)
         {
             try
             {
-                var result = await _eventService.AddEvents(eventDTO);
+                var result = await _eventService.AddEvents(id,eventDTO);
                 _responseDto.Result = result;
             }
             catch (Exception ex)
@@ -95,6 +95,23 @@ namespace Mitra.API.Controllers
             return _responseDto;
 
         }
+
+        [HttpDelete("Delete")]
+        public async Task<ActionResult<object>> GetDeleteById(int eventId)
+        {
+            try
+            {
+                var data = await _eventService.DeleteById(eventId);
+                _responseDto.Result = data;
+
+            }catch(Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+            }
+            return _responseDto;
+        }
+
+        
 
 
     }

@@ -24,19 +24,24 @@ namespace Mitra.Services.Services
             _appDbContext = appDbContext;
         }   
 
-        public async Task<List<DonorDto>> AddDonor(DonorDto donorDto)
+        public async Task<List<DonorDto>> AddDonor(int id, DonorDto donorDto)
         {
-            var donor = await _appDbContext.Donors.FirstOrDefaultAsync(u => u.MobileNumber == donorDto.MobileNumber);
 
-            if(donor != null)
+            var exitdonor = await _appDbContext.Donors.FindAsync(id);
+            if (exitdonor == null)
             {
-                // Return a list with a single "Donor Exists" item or handle it according to your needs
-                return new List<DonorDto> { new DonorDto { MobileNumber = "Donor Exists" } };
+                var donor = await _appDbContext.Donors.FirstOrDefaultAsync(u => u.MobileNumber == donorDto.MobileNumber);
+                if (donor != null)
+                {                 
+                    return new List<DonorDto> { new DonorDto { MobileNumber = "Donor Exists" } };
+
+                }
+                var donors = _mapper.Map<Donor>(donorDto);
+                _appDbContext.Add(donors);
+                await _appDbContext.SaveChangesAsync();
 
             }
-
-            var donors = _mapper.Map<Donor>(donorDto);
-            _appDbContext.Add(donors);
+            _mapper.Map(donorDto, exitdonor);
             await _appDbContext.SaveChangesAsync();
 
             var newDonors = await _appDbContext.Donors
