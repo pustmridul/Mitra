@@ -34,5 +34,21 @@ namespace Mitra.API.Controllers
             }
             return _responseDto;
         }
+
+        [HttpGet]
+        public async Task<ActionResult<object>> GetAllDonor()
+        {
+            try
+            {
+                List<DonorListDto> donors = await _donorService.GetAllDonor(); 
+                _responseDto.Result = donors;
+                 
+            }catch(Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+            }
+
+            return _responseDto;
+        }
     }
 }

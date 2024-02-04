@@ -10,5 +10,6 @@ namespace Mitra.Services.Interface
     public interface IDonorService
     {
         Task<List<DonorDto>> AddDonor( int id, DonorDto donorDto);
+        Task<List<DonorListDto>> GetAllDonor();
     }
 }

@@ -19,11 +19,11 @@ namespace Mitra.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<object>> AddExpectation(ExpectationDto expectationDto)
+        public async Task<ActionResult<object>> AddExpectation(ExpectationDto expectationDto, int id)
         {
             try
             {
-                var ressult = await _expectationService.AddExpectation(expectationDto);
+                var ressult = await _expectationService.AddExpectation(expectationDto, id);
                 _responseDto.Result = ressult;
 
             }

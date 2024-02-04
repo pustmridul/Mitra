@@ -51,5 +51,17 @@ namespace Mitra.Services.Services
             return newDonors;
 
         }
+
+        public async Task<List<DonorListDto>> GetAllDonor()
+        {
+            //var donorlist = await _appdbcontext.donors.tolistasync();
+            //var donorlistdtos = _mapper.map<list<donorlistdto>>(donorlist);
+            List<Donor> donors = await _appDbContext.Donors.ToListAsync();
+
+            var donorlistdtos  = _mapper.Map<List<DonorListDto>>(donors);
+            return donorlistdtos;
+
+          
+        }
     }
 }

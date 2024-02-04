@@ -15,5 +15,6 @@ namespace Mitra.Services.Interface
         Task<List<EventDTO>> UpdateEvents(EventDTO eventDTO);
         Task<EventListDto?> GetById(int id);
         Task<List<EventDTO>> DeleteById(int id);
+        Task<List<EventListDto>> GetByCatId(int catId);
     }
 }

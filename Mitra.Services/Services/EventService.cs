@@ -165,6 +165,17 @@ namespace Mitra.Services.Services
             return updatedEvent;
         }
 
+        public async Task<List<EventListDto>> GetByCatId(int catId)
+        {
+            var eventList = await _db.Events
+                .Where(e => e.EventcategoryId == catId)
+                    .ToListAsync();
+
+            var eventListDto = _mapper.Map<List<EventListDto>>(eventList);
+
+            return eventListDto;
+        }
+
         //    var query = from e in _db.Events
         //                join ec in _db.EventCategories on e.EventcategoryId equals ec.Id
         //                select new EventListDto

@@ -10,6 +10,6 @@ namespace Mitra.Services.Interface
 {
     public interface IExpectationService
     {
-        Task<List<ExpectationDto>> AddExpectation(ExpectationDto expectationDto);
+        Task<List<ExpectationDto>> AddExpectation(ExpectationDto expectationDto, int id);
     }
 }

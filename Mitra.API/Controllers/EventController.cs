@@ -45,11 +45,11 @@ namespace Mitra.API.Controllers
         //}
 
         [HttpPost]
-        public async Task<ActionResult<object>> CreateEvent(int id,EventDTO eventDTO)
+        public async Task<ActionResult<object>> CreateEvent(int id, EventDTO eventDTO)
         {
             try
             {
-                var result = await _eventService.AddEvents(id,eventDTO);
+                var result = await _eventService.AddEvents(id, eventDTO);
                 _responseDto.Result = result;
             }
             catch (Exception ex)
@@ -88,13 +88,37 @@ namespace Mitra.API.Controllers
                 var data = await _eventService.GetById(eventId);
                 _responseDto.Result = data;
             }
-            catch(Exception ex)
-            { 
+            catch (Exception ex)
+            {
                 _responseDto.IsSuccess = false;
             }
             return _responseDto;
 
         }
+
+        //    [HttpGet("GetByCatId")]
+        //    public async Task<ActionResult<object> GetByCategoryId(int eventCategory)
+        //    {
+        //      try{
+        //        }catch(Exception ex)
+        //        {
+        //        }
+        //return null;
+        //    }
+        [HttpGet("GetByCatId")]
+        public async Task<ActionResult<object>> GetByCatId( int CategoryId)
+        {
+            try
+            {
+                var result = await _eventService.GetByCatId(CategoryId);
+                _responseDto.Result = result;
+            }catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+            }
+            return _responseDto;
+        }
+
 
         [HttpDelete("Delete")]
         public async Task<ActionResult<object>> GetDeleteById(int eventId)
