@@ -56,5 +56,14 @@ namespace Mitra.Services.Services
 
             return expectationUp;
         }
+
+        public async Task<ExpectationDto> GetExpByEventAndDonorId(int donorId, int eventId)
+        {
+            var result = await _appDbContext.Expectations
+                .FirstOrDefaultAsync(e => e.DonorId == donorId && e.EventId == eventId);
+
+            return _mapper.Map<ExpectationDto>(result);
+            
+        }
     }
 }

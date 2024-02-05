@@ -37,6 +37,21 @@ namespace Mitra.API.Controllers
             return _responseDto;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<object>> GetExpByEventAndDonorId(int donorId, int eventId)
+        {
+            try{
+                var result = await _expectationService.GetExpByEventAndDonorId(donorId, eventId);
+                _responseDto.Result = result;
+
+            }
+            catch(Exception ex)
+                {
+                _responseDto.Result = false;
+            }
+            return _responseDto;
+        }
+
 
         
 
