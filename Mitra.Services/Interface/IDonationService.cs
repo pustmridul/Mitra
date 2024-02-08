@@ -1,4 +1,5 @@
-﻿using Mitra.Services.Dtos;
+﻿using Mitra.Domain.Entity;
+using Mitra.Services.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace Mitra.Services.Interface
     public interface IDonationService
     {
         Task<List<DonationDto>> AddDoation(DonationDto donationDto);
+        Task<IPaginatedResponse<DonationListDto>> GetDonation(int page, int pageSize);
     }
 }

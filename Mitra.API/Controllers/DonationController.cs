@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mitra.Services.Dtos;
 using Mitra.Services.Interface;
+using static Mitra.Services.Services.EventCategoryService;
 
 namespace Mitra.API.Controllers
 {
@@ -34,9 +36,26 @@ namespace Mitra.API.Controllers
             }
             return _responseDto;
         }
-       
-           
-            
+
+        [HttpGet]
+        public async Task<ActionResult<object>> GetDonation(int page, int pageSize)
+        {
+            try
+            {
+                int skip = (page - 1) * pageSize;
+                var res = await _donationService.GetDonation(skip, pageSize);
+                _responseDto.Result = res.Data;
+                _responseDto.Count = res.TotalRecords;
+                _responseDto.IsSuccess = true;
+                _responseDto.DisplayMessage = "Load ALL Data";
+
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+            }
+            return _responseDto;
+        }    
 
     }
 }

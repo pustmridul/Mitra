@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Mitra.Services\Mitra.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

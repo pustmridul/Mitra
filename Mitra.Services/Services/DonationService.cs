@@ -36,5 +36,77 @@ namespace Mitra.Services.Services
 
             return newDonation;
         }
+
+        public class PaginatedResponse<T> : IPaginatedResponse<T>
+        {
+            public IEnumerable<T> Data { get; set; }
+            public int TotalRecords { get; set; }
+        }
+
+        //public Task<IPaginatedResponse<DonationListDto>> GetDonation(int page, int pageSize)
+        //{
+        //    throw new NotImplementedException();
+        //}
+        public async Task<IPaginatedResponse<DonationListDto>> GetDonation(int skip, int take)
+        {
+            try
+            {
+
+                skip = Math.Max(skip, 0);
+                take = Math.Max(take, 0);
+
+                var totalRecords = await GetTotalEventCategoryCount();
+                var eventCategories = await GetPaginatedEventCategories(skip, take);
+
+                var response = new PaginatedResponse<DonationListDto>
+                {
+                    Data = eventCategories,
+                    TotalRecords = totalRecords
+                };
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving paginated event categories", ex);
+            }
+        }
+
+        private async Task<int> GetTotalEventCategoryCount()
+        {
+
+            return await _appDbContext.Donations.CountAsync();
+        }
+
+        private async Task<IEnumerable<DonationListDto>> GetPaginatedEventCategories(int skip, int take)
+        {
+
+            return await _appDbContext.Donations
+        .Join(
+            _appDbContext.Events,
+            donation => donation.EventId,
+            @event => @event.Id,
+            (donation, @event) => new { Donation = donation, Event = @event }
+        )
+        .Join(
+            _appDbContext.Donors,
+            join1 => join1.Donation.DonorId,
+            donor => donor.Id,
+            (join1, donor) => new { join1.Donation, join1.Event, Donor = donor }
+        )
+        .OrderByDescending(join => join.Donation.Id) // Order by some suitable property, e.g., Id
+        .Skip(skip)
+        .Take(take)
+        .Select(join => new DonationListDto
+        {
+            Amount = join.Donation.Amount,
+            EventName = join.Event.EventName,
+            DonorName = join.Donor.Name
+        })
+        .ToListAsync();
+        }
+
+       
     }
 }
