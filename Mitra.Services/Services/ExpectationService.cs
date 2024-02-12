@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Mitra.Domain;
 using Mitra.Domain.Entity;
 using Mitra.Services.Dtos;
@@ -65,5 +66,35 @@ namespace Mitra.Services.Services
             return _mapper.Map<ExpectationDto>(result);
             
         }
+
+        public async Task<List<ExpectationDto>> GetNOtDonateYetByEventId(int eventId)
+        {
+            var query = from e in _appDbContext.Expectations
+                        join d in _appDbContext.Donors on e.DonorId equals d.Id
+                        join ev in _appDbContext.Events on e.EventId equals ev.Id
+                        into eventGroup
+                        from ev in eventGroup.DefaultIfEmpty()
+                        join don in _appDbContext.Donations
+                            on new { e.EventId, e.DonorId } equals new { don.EventId, don.DonorId } into donationGroup
+                        from don in donationGroup.DefaultIfEmpty()
+                        where  don.EventId == eventId
+                        select new ExpectationDto
+                        {
+                            EventId = e.EventId,
+                            EventName = ev.EventName,
+                            DonorId = e.DonorId,
+                            DonorName = d.Name,
+                            Amount = e.Amount
+                        };
+
+            var result = await query.ToListAsync();
+
+            return result;
+        }
+
+        //public Task<List<ExpectationDto>> GetNOtDonateYetByEventId(int eventId)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

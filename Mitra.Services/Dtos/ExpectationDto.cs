@@ -11,5 +11,7 @@ namespace Mitra.Services.Dtos
         public decimal Amount { get; set; }
         public int EventId { get; set; }
         public int DonorId { get; set; }
+        public string EventName { get; set; }
+        public string DonorName { get; set; }   
     }
 }

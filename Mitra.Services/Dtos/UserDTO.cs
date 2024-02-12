@@ -16,4 +16,9 @@ namespace Mitra.Services.Dtos
         public DateTime TokenExpires { get; set; }
 
     }
+    public class LoginResponse
+    {
+        public string Token { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+    }
 }

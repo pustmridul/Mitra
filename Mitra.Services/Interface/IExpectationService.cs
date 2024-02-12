@@ -12,5 +12,6 @@ namespace Mitra.Services.Interface
     {
         Task<List<ExpectationDto>> AddExpectation(ExpectationDto expectationDto, int id);
         Task<ExpectationDto> GetExpByEventAndDonorId(int donorId, int eventId);
+        Task<List<ExpectationDto>> GetNOtDonateYetByEventId(int eventId);
     }
 }

@@ -33,34 +33,44 @@ namespace Mitra.Services.Services
             _httpContextAccessor = httpContextAccessor;
         }
        
-        public async Task<string> Login(UserDTO userDto)
+        public async Task<LoginResponse> Login(UserDTO userDto)
         {
+             var result =new LoginResponse();
+
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
 
             if ( user.Username != userDto.Username)
             {
-                return "User does not exist";
+                return result;
             }
 
             if (!BCrypt.Net.BCrypt.Verify(userDto.PasswordHash, user.PasswordHash))
             {
-                return "worng Password";
+                return result;
             }
 
-            _mapper.Map<UserDTO>(user);
-            string token = CreateToken(user);
+           var nUser =  _mapper.Map<UserDTO>(user);
+            string token = CreateToken(nUser);
 
             var refreshToken = GenerateRefreshToken();
-            SetRefreshToken(user,refreshToken);
-            return token;
+            SetRefreshToken(nUser, refreshToken);
+            
+            result.Token = token;
+            result.Username= userDto.Username;
+
+            return result;
         }
 
-        private string CreateToken(User user)
+        private string CreateToken( UserDTO user)
         {
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, "Admin")
+               
+                
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim( "userName", user.Username),
+
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
@@ -91,10 +101,10 @@ namespace Mitra.Services.Services
             {
                 return "Invalid Refresh Token or Token expired.";
             }
-
-            string token = CreateToken(user);
+            var nUser = _mapper.Map<UserDTO>(user);
+            string token = CreateToken(nUser);
             var newRefreshToken = GenerateRefreshToken();
-            SetRefreshToken(user, newRefreshToken);
+            SetRefreshToken(nUser, newRefreshToken);
 
             return token;
         }
@@ -112,7 +122,7 @@ namespace Mitra.Services.Services
 
 
 
-        private void SetRefreshToken(User user, RefreshToken newRefreshToken)
+        private void SetRefreshToken(UserDTO user, RefreshToken newRefreshToken)
         {
 
             var context = _httpContextAccessor.HttpContext;

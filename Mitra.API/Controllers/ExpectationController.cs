@@ -12,7 +12,7 @@ namespace Mitra.API.Controllers
         protected ResponseDto _responseDto;
         private IExpectationService _expectationService;
 
-        public ExpectationController( IExpectationService expectationService)
+        public ExpectationController(IExpectationService expectationService)
         {
             this._responseDto = new ResponseDto();
             _expectationService = expectationService;
@@ -30,7 +30,7 @@ namespace Mitra.API.Controllers
             catch (Exception ex)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.ErrorMessages = new List<string> { ex.Message };   
+                _responseDto.ErrorMessages = new List<string> { ex.Message };
 
             }
 
@@ -40,20 +40,31 @@ namespace Mitra.API.Controllers
         [HttpGet]
         public async Task<ActionResult<object>> GetExpByEventAndDonorId(int donorId, int eventId)
         {
-            try{
+            try {
                 var result = await _expectationService.GetExpByEventAndDonorId(donorId, eventId);
                 _responseDto.Result = result;
 
             }
-            catch(Exception ex)
-                {
+            catch (Exception ex)
+            {
                 _responseDto.Result = false;
             }
             return _responseDto;
         }
 
-
-        
+        [HttpGet("GetExpectation")]
+        public async Task<ActionResult<object>> GetNOtDonateYetByEventId(int eventId)
+        {
+            try{
+                var result = await _expectationService.GetNOtDonateYetByEventId(eventId); 
+                _responseDto.Result = result;
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+            }
+            return _responseDto;
+        }
 
     }
 }
