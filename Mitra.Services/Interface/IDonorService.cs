@@ -9,7 +9,8 @@ namespace Mitra.Services.Interface
 {
     public interface IDonorService
     {
-        Task<List<DonorDto>> AddDonor( int id, DonorDto donorDto);
+        Task<DonorReponse> AddDonor( int id, DonorDto donorDto);
         Task<List<DonorListDto>> GetAllDonor();
+        Task<IPaginatedResponse<DonorListDto>> GetAllDonorList(int skip, int pageSize);
     }
 }

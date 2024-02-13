@@ -33,19 +33,21 @@ namespace Mitra.Services.Services
             _httpContextAccessor = httpContextAccessor;
         }
        
-        public async Task<LoginResponse> Login(UserDTO userDto)
+        public async Task<LoginResponse> Login(LoginDto userDto)
         {
-             var result =new LoginResponse();
+             var result = new LoginResponse();
 
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
 
             if ( user.Username != userDto.Username)
             {
+                result.Message = "User Not Exit";   
                 return result;
             }
 
             if (!BCrypt.Net.BCrypt.Verify(userDto.PasswordHash, user.PasswordHash))
             {
+                result.Message = "InValid Password";
                 return result;
             }
 
@@ -57,6 +59,7 @@ namespace Mitra.Services.Services
             
             result.Token = token;
             result.Username= userDto.Username;
+            result.Id = user.Id;
 
             return result;
         }
@@ -147,7 +150,8 @@ namespace Mitra.Services.Services
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
 
-            if (user.Username == userDto.Username)
+
+            if (user != null)
             {
                 return new List<UserDTO> { new UserDTO { ErrorMessage = "User already exists" } };
             }

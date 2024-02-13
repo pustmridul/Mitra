@@ -21,6 +21,7 @@ namespace Mitra.Domain
         public DbSet<Donor> Donors { get; set; }
         public DbSet<Donation> Donations { get; set; }
         public DbSet<Expectation> Expectations { get; set; }
+        public DbSet<Street> Streets { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +37,11 @@ namespace Mitra.Domain
                 .HasMany(e => e.Donors)
                 .WithOne(vd => vd.User)
                 .HasForeignKey(vd => vd.userId);
+
+            modelBuilder.Entity<Street>()
+                .HasMany(e => e.Donors)
+                .WithOne(vd => vd.Street)
+                .HasForeignKey(vd => vd.StreetId);
 
 
 
@@ -77,6 +83,8 @@ namespace Mitra.Domain
                     .HasForeignKey(d => d.DonorId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            
 
 
             base.OnModelCreating(modelBuilder);

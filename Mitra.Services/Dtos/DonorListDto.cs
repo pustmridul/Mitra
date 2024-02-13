@@ -12,6 +12,7 @@ namespace Mitra.Services.Dtos
         public string Name { get; set; }
         public string MobileNumber { get; set; }
         public string Address { get; set; }
+        public int? StreetId { get; set; }
         public int userId { get; set; }
     }
 }

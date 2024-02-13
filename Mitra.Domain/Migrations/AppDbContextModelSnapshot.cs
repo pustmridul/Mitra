@@ -83,10 +83,15 @@ namespace Mitra.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("StreetId")
+                        .HasColumnType("int");
+
                     b.Property<int>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StreetId");
 
                     b.HasIndex("userId");
 
@@ -214,6 +219,29 @@ namespace Mitra.Domain.Migrations
                     b.ToTable("Items");
                 });
 
+            modelBuilder.Entity("Mitra.Domain.Entity.Street", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreateByText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Streets");
+                });
+
             modelBuilder.Entity("Mitra.Domain.Entity.User", b =>
                 {
                     b.Property<int>("Id")
@@ -275,11 +303,17 @@ namespace Mitra.Domain.Migrations
 
             modelBuilder.Entity("Mitra.Domain.Entity.Donor", b =>
                 {
+                    b.HasOne("Mitra.Domain.Entity.Street", "Street")
+                        .WithMany("Donors")
+                        .HasForeignKey("StreetId");
+
                     b.HasOne("Mitra.Domain.Entity.User", "User")
                         .WithMany("Donors")
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Street");
 
                     b.Navigation("User");
                 });
@@ -331,6 +365,11 @@ namespace Mitra.Domain.Migrations
             modelBuilder.Entity("Mitra.Domain.Entity.EventCategory", b =>
                 {
                     b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("Mitra.Domain.Entity.Street", b =>
+                {
+                    b.Navigation("Donors");
                 });
 
             modelBuilder.Entity("Mitra.Domain.Entity.User", b =>

@@ -11,7 +11,7 @@ namespace Mitra.Services.Interface
     public interface IUserService
     {
         Task<List<UserDTO>> RegisterUser(UserDTO userDto);
-        Task<LoginResponse> Login(UserDTO userDto);
+        Task<LoginResponse> Login(LoginDto userDto);
         Task<string> RefreashToken(string refreshToken);
     }
 }

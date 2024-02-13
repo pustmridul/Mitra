@@ -21,10 +21,13 @@ namespace Mitra.Services
                 config.CreateMap<Event, EventListDto>().ReverseMap();
                 config.CreateMap<User, UserDTO>().ReverseMap(); 
                 config.CreateMap<UserDTO, User>().ReverseMap();
+                config.CreateMap<User,LoginDto>().ReverseMap();
+                config.CreateMap<LoginDto,User>().ReverseMap();
                 config.CreateMap<Donor,DonorDto>().ReverseMap();
                 config.CreateMap<DonorDto, Donor>().ReverseMap();
-                config.CreateMap<Donor, DonorListDto>().ReverseMap();
-                config.CreateMap<DonorListDto, Donor>().ReverseMap();
+                config.CreateMap<Donor, DonorListDto>().ReverseMap()
+                .ForMember(dest => dest.StreetId, opt => opt.MapFrom(src => src.StreetId.HasValue ? src.StreetId.Value : 0));
+                //config.CreateMap<DonorListDto, Donor>().ReverseMap();
                 config.CreateMap<Donation, DonationDto>().ReverseMap();
                 config.CreateMap<DonationDto, Donation>().ReverseMap();
                 config.CreateMap<Expectation, ExpectationDto>().ReverseMap();

@@ -12,8 +12,8 @@ using Mitra.Domain;
 namespace Mitra.Domain.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240110045140_initial3")]
-    partial class initial3
+    [Migration("20240213124754_initial14")]
+    partial class initial14
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,6 +44,9 @@ namespace Mitra.Domain.Migrations
 
                     b.Property<int>("DonorId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("EventDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
@@ -83,10 +86,15 @@ namespace Mitra.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("StreetId")
+                        .HasColumnType("int");
+
                     b.Property<int>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StreetId");
 
                     b.HasIndex("userId");
 
@@ -157,6 +165,38 @@ namespace Mitra.Domain.Migrations
                     b.ToTable("EventCategories");
                 });
 
+            modelBuilder.Entity("Mitra.Domain.Entity.Expectation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CreateByText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DonorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DonorId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Expectations");
+                });
+
             modelBuilder.Entity("Mitra.Domain.Entity.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -180,6 +220,29 @@ namespace Mitra.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("Mitra.Domain.Entity.Street", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreateByText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Streets");
                 });
 
             modelBuilder.Entity("Mitra.Domain.Entity.User", b =>
@@ -243,11 +306,17 @@ namespace Mitra.Domain.Migrations
 
             modelBuilder.Entity("Mitra.Domain.Entity.Donor", b =>
                 {
+                    b.HasOne("Mitra.Domain.Entity.Street", "Street")
+                        .WithMany("Donors")
+                        .HasForeignKey("StreetId");
+
                     b.HasOne("Mitra.Domain.Entity.User", "User")
                         .WithMany("Donors")
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Street");
 
                     b.Navigation("User");
                 });
@@ -263,19 +332,47 @@ namespace Mitra.Domain.Migrations
                     b.Navigation("EventCategory");
                 });
 
+            modelBuilder.Entity("Mitra.Domain.Entity.Expectation", b =>
+                {
+                    b.HasOne("Mitra.Domain.Entity.Donor", "Donor")
+                        .WithMany("Expectations")
+                        .HasForeignKey("DonorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Mitra.Domain.Entity.Event", "Event")
+                        .WithMany("Expectations")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Donor");
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("Mitra.Domain.Entity.Donor", b =>
                 {
                     b.Navigation("Donations");
+
+                    b.Navigation("Expectations");
                 });
 
             modelBuilder.Entity("Mitra.Domain.Entity.Event", b =>
                 {
                     b.Navigation("Donations");
+
+                    b.Navigation("Expectations");
                 });
 
             modelBuilder.Entity("Mitra.Domain.Entity.EventCategory", b =>
                 {
                     b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("Mitra.Domain.Entity.Street", b =>
+                {
+                    b.Navigation("Donors");
                 });
 
             modelBuilder.Entity("Mitra.Domain.Entity.User", b =>

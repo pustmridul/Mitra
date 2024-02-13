@@ -46,7 +46,7 @@ namespace Mitra.API.Controllers
    
 
         [HttpPost("login")]
-        public async Task<ActionResult<object>> login(UserDTO userDto)
+        public async Task<ActionResult<object>> login(LoginDto userDto)
         {
             try
             {

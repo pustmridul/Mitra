@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mitra.Services.Dtos;
 using Mitra.Services.Interface;
+using Mitra.Services.Services;
 
 namespace Mitra.API.Controllers
 {
@@ -24,13 +26,15 @@ namespace Mitra.API.Controllers
             try
             {
                 var result = await _donorService.AddDonor(id, donorDto);
-                _responseDto.Result = result;    
+                _responseDto.Result = result; 
+               
 
             }
             catch (Exception ex)
             {
-                var message = ex.Message;
-                
+                _responseDto.IsSuccess = false;
+                _responseDto.ErrorMessages = new List<string> { ex.Message };
+
             }
             return _responseDto;
         }
@@ -50,5 +54,26 @@ namespace Mitra.API.Controllers
 
             return _responseDto;
         }
+        [HttpGet("GetALL")]
+        public async Task<object> GetDonorList(int page, int pageSize)
+        {
+            try
+            {
+              
+                int skip = (page - 1) * pageSize;
+                var paginatedResponse = await _donorService.GetAllDonorList(skip, pageSize);
+
+                _responseDto.Result = paginatedResponse.Data;
+                _responseDto.Count = paginatedResponse.TotalRecords;
+                _responseDto.IsSuccess = true;
+                _responseDto.DisplayMessage = "Load ALL Data";
+            }
+            catch(Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+            }
+            return _responseDto;
+        }
+
     }
 }
