@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mitra.Domain;
 using Mitra.Domain.Entity;
+using Mitra.Services.Common;
 using Mitra.Services.Dtos;
 using Mitra.Services.Interface;
 using System;
@@ -23,7 +24,7 @@ namespace Mitra.Services.Services
             _mapper = mapper;
             _appDbContext = appDbContext;
         }
-        public async Task<List<ExpectationDto>> AddExpectation(ExpectationDto expectationDto, int id)
+        public async Task<List<ExpectationAddDto>> AddExpectation(ExpectationAddDto expectationDto, int id)
         {
             var expectationfond = await _appDbContext.Expectations.FindAsync(id);
            
@@ -52,7 +53,7 @@ namespace Mitra.Services.Services
 
 
             var expectationUp = await _appDbContext.Expectations
-               .ProjectTo<ExpectationDto>(_mapper.ConfigurationProvider)
+               .ProjectTo<ExpectationAddDto>(_mapper.ConfigurationProvider)
                .ToListAsync();
 
             return expectationUp;
@@ -66,6 +67,74 @@ namespace Mitra.Services.Services
             return _mapper.Map<ExpectationDto>(result);
             
         }
+
+        public async Task<IPaginatedResponse<ExpectationDto>> GetExpectationList(int skip, int take)
+        {
+            try
+            {
+
+                skip = Math.Max(skip, 0);
+                take = Math.Max(take, 0);
+
+                var totalRecords = await GetTotalExpectationCount();
+                var expectations = await GetPaginatedExpectation(skip, take);
+
+                var response = new PaginatedResponse<ExpectationDto>
+                {
+                    Data = expectations,
+                    TotalRecords = totalRecords
+                };
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving paginated event categories", ex);
+            }
+        }
+
+        private async Task<int> GetTotalExpectationCount()
+        {
+
+            return await _appDbContext.Expectations.CountAsync();
+        }
+
+        private async Task<IEnumerable<ExpectationDto>> GetPaginatedExpectation(int skip, int take)
+        {
+
+            //return await _appDbContext.Expectations
+            //    .Skip(skip)
+            //    .Take(take)
+            //    .Select(eventCategory => _mapper.Map<ExpectationDto>(eventCategory))
+            //    .ToListAsync();
+
+            var query = (from e in _appDbContext.Expectations
+                         join d in _appDbContext.Donors on e.DonorId equals d.Id
+                         join ev in _appDbContext.Events on e.EventId equals ev.Id
+                         into eventGroup
+                         from ev in eventGroup.DefaultIfEmpty()
+                         join don in _appDbContext.Donations
+                             on new { e.EventId, e.DonorId } equals new { don.EventId, don.DonorId } into donationGroup
+                         from don in donationGroup.DefaultIfEmpty()
+                        
+                         select new ExpectationDto
+                         {
+                             EventId = e.EventId,
+                             EventName = ev.EventName,
+                             DonorId = e.DonorId,
+                             DonorName = d.Name,
+                             Amount = e.Amount
+                         })
+             .Skip(skip)
+             .Take(take);
+            var result = await query.ToListAsync();
+            return result;
+
+        }
+
+
+
 
         public async Task<List<ExpectationDto>> GetNOtDonateYetByEventId(int eventId)
         {

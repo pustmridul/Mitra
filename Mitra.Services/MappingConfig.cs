@@ -32,6 +32,8 @@ namespace Mitra.Services
                 config.CreateMap<DonationDto, Donation>().ReverseMap();
                 config.CreateMap<Expectation, ExpectationDto>().ReverseMap();
                 config.CreateMap<ExpectationDto, Expectation>().ReverseMap();
+                config.CreateMap<Expectation, ExpectationAddDto>().ReverseMap();
+                config.CreateMap<ExpectationAddDto, Expectation>().ReverseMap();
                 config.CreateMap<EventCategoryListDTO, EventCategory>().ReverseMap();
                 config.CreateMap< EventCategory, EventCategoryListDTO>().ReverseMap();
             });

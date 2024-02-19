@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mitra.Services.Dtos;
 using Mitra.Services.Interface;
+using Mitra.Services.Services;
 
 namespace Mitra.API.Controllers
 {
@@ -19,7 +21,7 @@ namespace Mitra.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<object>> AddExpectation(ExpectationDto expectationDto, int id)
+        public async Task<ActionResult<object>> AddExpectation(ExpectationAddDto expectationDto, int id)
         {
             try
             {
@@ -48,6 +50,29 @@ namespace Mitra.API.Controllers
             catch (Exception ex)
             {
                 _responseDto.Result = false;
+            }
+            return _responseDto;
+        }
+
+        [HttpGet("GetExpectationList")]
+        public async Task<ActionResult<object>> GetExpectationList(int page , int pageSize)
+        {
+            try
+            {
+                int skip = (page - 1) * pageSize;
+
+
+                var paginatedResponse = await _expectationService.GetExpectationList(skip, pageSize);
+
+
+                _responseDto.Result = paginatedResponse.Data;
+                _responseDto.Count = paginatedResponse.TotalRecords;
+                _responseDto.IsSuccess = true;
+                _responseDto.DisplayMessage = "Load ALL Data";
+            }
+            catch(Exception ex)
+            {
+                _responseDto = new ResponseDto();
             }
             return _responseDto;
         }
