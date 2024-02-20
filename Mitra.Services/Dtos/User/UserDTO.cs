@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mitra.Services.Dtos
+namespace Mitra.Services.Dtos.User
 {
-    public  class UserDTO
+    public class UserDTO
     {
         public string Username { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
@@ -21,6 +21,6 @@ namespace Mitra.Services.Dtos
         public string Token { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
         public int Id { get; set; }
-        public string Message { get; set;} = string.Empty;
+        public string Message { get; set; } = string.Empty;
     }
 }

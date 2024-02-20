@@ -3,7 +3,8 @@ using Azure.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mitra.Domain.Entity;
-using Mitra.Services.Dtos;
+using Mitra.Services.Dtos.Common;
+using Mitra.Services.Dtos.EventCategory;
 using Mitra.Services.Interface;
 using Mitra.Services.Services;
 

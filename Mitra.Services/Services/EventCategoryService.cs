@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Mitra.Domain.Entity;
 using Mitra.Domain;
-using Mitra.Services.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +9,8 @@ using System.Threading.Tasks;
 using Mitra.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
+using Mitra.Services.Dtos.EventCategory;
+using Mitra.Services.Common;
 
 namespace Mitra.Services.Services
 {
@@ -55,12 +56,7 @@ namespace Mitra.Services.Services
         }
 
 
-        public class PaginatedResponse<T> : IPaginatedResponse<T>
-        {
-            public IEnumerable<T> Data { get; set; }
-            public int TotalRecords { get; set; }
-        }
-        public async Task<IPaginatedResponse<EventCategoryListDTO>> GetAllEventCategory(int skip, int take)
+          public async Task<IPaginatedResponse<EventCategoryListDTO>> GetAllEventCategory(int skip, int take)
         {
             try
             {

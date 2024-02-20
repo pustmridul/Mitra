@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mitra.Services.Dtos
+namespace Mitra.Services.Dtos.Event
 {
-    public class EventDTO:BaseEntity
+    public class EventDTO : BaseEntity
     {
         public string EventName { get; set; }
         public string EventAddress { get; set; }

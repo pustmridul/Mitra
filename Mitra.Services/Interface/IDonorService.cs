@@ -1,4 +1,4 @@
-﻿using Mitra.Services.Dtos;
+﻿using Mitra.Services.Dtos.Donor;
 using System;
 using System.Collections.Generic;
 using System.Linq;

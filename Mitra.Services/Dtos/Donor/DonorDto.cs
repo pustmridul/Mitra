@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mitra.Services.Dtos
+namespace Mitra.Services.Dtos.Donor
 {
     public class DonorDto
     {
@@ -16,7 +16,7 @@ namespace Mitra.Services.Dtos
     }
 
     public class DonorReponse
-    { 
+    {
         public string Message { get; set; } = string.Empty;
     }
 }

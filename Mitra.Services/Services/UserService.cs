@@ -13,8 +13,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
-
-
+using Mitra.Services.Dtos.User;
 
 namespace Mitra.Services.Services
 {
@@ -92,8 +91,6 @@ namespace Mitra.Services.Services
             return jwt;
         }
 
-        
-
         public async Task<string> RefreashToken(string refreshToken)
         {
 
@@ -122,8 +119,6 @@ namespace Mitra.Services.Services
             };
             return refreshToken;
         }
-
-
 
         private void SetRefreshToken(UserDTO user, RefreshToken newRefreshToken)
         {

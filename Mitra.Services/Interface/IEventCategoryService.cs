@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Mitra.Services.Dtos;
+using Mitra.Services.Dtos.EventCategory;
 using System;
 using System.Collections.Generic;
 using System.Linq;

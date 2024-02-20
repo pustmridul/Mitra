@@ -1,7 +1,8 @@
 ﻿using Azure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Mitra.Services.Dtos;
+using Mitra.Services.Dtos.Common;
+using Mitra.Services.Dtos.Donor;
 using Mitra.Services.Interface;
 using Mitra.Services.Services;
 

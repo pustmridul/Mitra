@@ -2,16 +2,13 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Mitra.Domain;
 using Mitra.Domain.Entity;
 using Mitra.Services.Common;
-using Mitra.Services.Dtos;
+using Mitra.Services.Dtos.Expectation;
 using Mitra.Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Mitra.Services.Services
 {
@@ -48,9 +45,6 @@ namespace Mitra.Services.Services
                 _mapper.Map(expectationDto, expectationfond);
                 await _appDbContext.SaveChangesAsync();
             }
-
-           
-
 
             var expectationUp = await _appDbContext.Expectations
                .ProjectTo<ExpectationAddDto>(_mapper.ConfigurationProvider)
@@ -103,21 +97,9 @@ namespace Mitra.Services.Services
         private async Task<IEnumerable<ExpectationDto>> GetPaginatedExpectation(int skip, int take)
         {
 
-            //return await _appDbContext.Expectations
-            //    .Skip(skip)
-            //    .Take(take)
-            //    .Select(eventCategory => _mapper.Map<ExpectationDto>(eventCategory))
-            //    .ToListAsync();
-
             var query = (from e in _appDbContext.Expectations
                          join d in _appDbContext.Donors on e.DonorId equals d.Id
                          join ev in _appDbContext.Events on e.EventId equals ev.Id
-                         into eventGroup
-                         from ev in eventGroup.DefaultIfEmpty()
-                         join don in _appDbContext.Donations
-                             on new { e.EventId, e.DonorId } equals new { don.EventId, don.DonorId } into donationGroup
-                         from don in donationGroup.DefaultIfEmpty()
-                        
                          select new ExpectationDto
                          {
                              EventId = e.EventId,
@@ -133,9 +115,6 @@ namespace Mitra.Services.Services
 
         }
 
-
-
-
         public async Task<List<ExpectationDto>> GetNOtDonateYetByEventId(int eventId)
         {
             var query = from e in _appDbContext.Expectations
@@ -146,7 +125,8 @@ namespace Mitra.Services.Services
                         join don in _appDbContext.Donations
                             on new { e.EventId, e.DonorId } equals new { don.EventId, don.DonorId } into donationGroup
                         from don in donationGroup.DefaultIfEmpty()
-                        where  don.EventId == eventId
+                            //where don == null && e.EventId == (string.IsNullOrEmpty(eventId) ? e.EventId : eventId)
+                        where don == null && e.EventId == eventId
                         select new ExpectationDto
                         {
                             EventId = e.EventId,

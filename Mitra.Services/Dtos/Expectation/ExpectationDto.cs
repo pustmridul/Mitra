@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mitra.Services.Dtos
+namespace Mitra.Services.Dtos.Expectation
 {
     public class ExpectationDto
     {
@@ -12,6 +12,6 @@ namespace Mitra.Services.Dtos
         public int EventId { get; set; }
         public int DonorId { get; set; }
         public string EventName { get; set; }
-        public string DonorName { get; set; }   
+        public string DonorName { get; set; }
     }
 }

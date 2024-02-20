@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mitra.Services.Dtos
+namespace Mitra.Services.Dtos.Event
 {
     public class EventListDto
     {
@@ -14,6 +14,6 @@ namespace Mitra.Services.Dtos
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string EventCategoryName { get; set; }
-       // public int EventcategoryId { get; set; }
+        // public int EventcategoryId { get; set; }
     }
 }

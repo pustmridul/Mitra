@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mitra.Services.Dtos
+namespace Mitra.Services.Dtos.Common
 {
     public class ResponseDto
     {
@@ -12,6 +12,6 @@ namespace Mitra.Services.Dtos
         public object Result { get; set; }
         public string DisplayMessage { get; set; } = "";
         public List<string>? ErrorMessages { get; set; }
-        public int Count {get; set;}
+        public int Count { get; set; }
     }
 }

@@ -4,7 +4,8 @@ using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using Mitra.Domain;
 using Mitra.Domain.Entity;
-using Mitra.Services.Dtos;
+using Mitra.Services.Common;
+using Mitra.Services.Dtos.Event;
 using Mitra.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -175,22 +176,6 @@ namespace Mitra.Services.Services
 
             return eventListDto;
         }
-
-        //    var query = from e in _db.Events
-        //                join ec in _db.EventCategories on e.EventcategoryId equals ec.Id
-        //                select new EventListDto
-        //                {
-        //                    EventName = e.EventName,
-        //                    EventAddress = e.EventAddress,
-        //                    StartDate = e.StartDate,
-        //                    EndDate = e.EndDate,
-        //                    EventCategoryName = ec.CategoryName
-        //                };
-
-        //return await query
-        //    .Skip(skip)
-        //    .Take(take)
-        //    .ToListAsync();
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mitra.Services.Dtos;
+using Mitra.Services.Dtos.Common;
 using Mitra.Services.Interface;
 
 namespace Mitra.API.Controllers

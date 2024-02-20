@@ -3,7 +3,8 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Mitra.Domain;
 using Mitra.Domain.Entity;
-using Mitra.Services.Dtos;
+using Mitra.Services.Common;
+using Mitra.Services.Dtos.Donation;
 using Mitra.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -37,16 +38,6 @@ namespace Mitra.Services.Services
             return newDonation;
         }
 
-        public class PaginatedResponse<T> : IPaginatedResponse<T>
-        {
-            public IEnumerable<T> Data { get; set; }
-            public int TotalRecords { get; set; }
-        }
-
-        //public Task<IPaginatedResponse<DonationListDto>> GetDonation(int page, int pageSize)
-        //{
-        //    throw new NotImplementedException();
-        //}
         public async Task<IPaginatedResponse<DonationListDto>> GetDonation(int skip, int take)
         {
             try

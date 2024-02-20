@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mitra.Services.Dtos;
+using Mitra.Services.Dtos.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;

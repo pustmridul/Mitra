@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mitra.Services.Dtos
+namespace Mitra.Services.Dtos.EventCategory
 {
-    public  class EventCategoryDTO
+    public class EventCategoryDTO
     {
-       // public int Id { get; set; }
+        // public int Id { get; set; }
         public string categoryName { get; set; }
         public int parentId { get; set; }
-       
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Mitra.Domain.Entity;
-using Mitra.Services.Dtos;
+using Mitra.Services.Dtos.Donation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
