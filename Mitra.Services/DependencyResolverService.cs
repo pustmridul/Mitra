@@ -33,7 +33,11 @@ namespace Mitra.Services
             services.AddTransient<IDonorService, DonorService>();
             services.AddTransient<IDonationService, DonationService>();
             services.AddTransient<IExpectationService, ExpectationService>();
-            services.AddCors();
+            //services.AddCors();
+
+            // Add CORS policy to allow requests from any origin
+            
+
 
 
             services.AddSwaggerGen(options =>
@@ -51,7 +55,22 @@ namespace Mitra.Services
 
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(options =>
+            //    {
+            //        options.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuerSigningKey = true,
+            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AppSettings:Token"])),
+            //            ValidateIssuer = false,
+            //            ValidateAudience = false
+            //        };
+            //    });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -61,9 +80,20 @@ namespace Mitra.Services
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
+                })
+                //.AddCookie(options =>
+                //{
+                //    options.LoginPath = "/account/signin-login";
+                //})
+                .AddGoogle(options =>
+                {
+                    options.ClientId = "826276899262-vn0q0vi9f5of7jhtsau3bjm96m2ttbmv.apps.googleusercontent.com";
+                    options.ClientSecret = "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";
                 });
 
-           
+                
+
+
             services.AddAuthorization();
 
 
