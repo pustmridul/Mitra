@@ -36,8 +36,15 @@ namespace Mitra.Services
             //services.AddCors();
 
             // Add CORS policy to allow requests from any origin
-            
-
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyOrigin",
+                    builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                );
+            });
 
 
             services.AddSwaggerGen(options =>
@@ -89,9 +96,10 @@ namespace Mitra.Services
                 {
                     options.ClientId = "826276899262-vn0q0vi9f5of7jhtsau3bjm96m2ttbmv.apps.googleusercontent.com";
                     options.ClientSecret = "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";
+                    //options.CallbackPath = "/signin-google";
                 });
 
-                
+            
 
 
             services.AddAuthorization();

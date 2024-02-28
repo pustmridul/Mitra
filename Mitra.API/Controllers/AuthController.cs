@@ -74,16 +74,26 @@ namespace Mitra.API.Controllers
             return Ok(token);
 
         }
-        
-        [HttpGet("google-login")]
-        public IActionResult GoogleLogin(string returnUrl = "/")
+
+        [HttpGet("signin-google")]
+        public IActionResult GoogleSignIn()
         {
-            var properties = new AuthenticationProperties { RedirectUri = returnUrl };
-            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+            try
+            {
+                var properties = new AuthenticationProperties
+                {
+                    RedirectUri = "/auth/google-callback" // Callback endpoint
+                };
+                return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
-       
+
         [HttpGet("google-callback")]
-        public async Task<IActionResult> GoogleCallbackAsync(string returnUrl = "/")
+        public async Task<IActionResult> GoogleCallback()
         {
             var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
 
@@ -99,6 +109,31 @@ namespace Mitra.API.Controllers
 
             return Ok(new { Email = email, Name = name });
         }
+
+        //[HttpGet("google-login")]
+        //public IActionResult GoogleLogin(string returnUrl = "/")
+        //{
+        //    var properties = new AuthenticationProperties { RedirectUri = returnUrl };
+        //    return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+        //}
+
+        //[HttpGet("google-callback")]
+        //public async Task<IActionResult> GoogleCallbackAsync(string returnUrl = "/")
+        //{
+        //    var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+
+        //    if (!authenticateResult.Succeeded)
+        //    {
+        //        return BadRequest("Failed to authenticate with Google.");
+        //    }
+
+        //    var email = authenticateResult.Principal.FindFirstValue(ClaimTypes.Email);
+        //    var name = authenticateResult.Principal.FindFirstValue(ClaimTypes.Name);
+
+        //    // Further processing - create user account, sign in, etc.
+
+        //    return Ok(new { Email = email, Name = name });
+        //}
 
 
 
@@ -124,9 +159,6 @@ namespace Mitra.API.Controllers
         //    user.TokenCreated = newRefreshToken.Created;
         //    user.TokenCreated = newRefreshToken.Expires;
         //}
-
-
-
 
 
     }
