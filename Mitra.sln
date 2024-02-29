@@ -5,11 +5,11 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{212928BB-F94F-49C6-96CC-31CDBFC4F198}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitra.API", "Mitra.API\Mitra.API.csproj", "{8EBF7C71-7534-46D3-A266-3BF5D75AAA85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mitra.API", "Mitra.API\Mitra.API.csproj", "{8EBF7C71-7534-46D3-A266-3BF5D75AAA85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitra.Domain", "Mitra.Domain\Mitra.Domain.csproj", "{BC6E9A82-5D98-4760-87A2-1E3AE02A5029}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mitra.Domain", "Mitra.Domain\Mitra.Domain.csproj", "{BC6E9A82-5D98-4760-87A2-1E3AE02A5029}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitra.Services", "Mitra.Services\Mitra.Services.csproj", "{E22AF5B2-73C3-4BBA-A1A0-821EDE651723}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mitra.Services", "Mitra.Services\Mitra.Services.csproj", "{E22AF5B2-73C3-4BBA-A1A0-821EDE651723}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

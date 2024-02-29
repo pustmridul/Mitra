@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -38,14 +39,16 @@ namespace Mitra.Services
             // Add CORS policy to allow requests from any origin
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAnyOrigin",
-                    builder => builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                );
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
             });
 
+            services.AddControllers();
 
             services.AddSwaggerGen(options =>
             {
@@ -77,6 +80,7 @@ namespace Mitra.Services
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
                 .AddJwtBearer(options =>
                 {
@@ -88,10 +92,10 @@ namespace Mitra.Services
                         ValidateAudience = false
                     };
                 })
-                //.AddCookie(options =>
-                //{
-                //    options.LoginPath = "/account/signin-login";
-                //})
+               .AddCookie(options =>
+               {
+                   options.LoginPath = "/account/google-login";
+               })
                 .AddGoogle(options =>
                 {
                     options.ClientId = "826276899262-vn0q0vi9f5of7jhtsau3bjm96m2ttbmv.apps.googleusercontent.com";
@@ -99,9 +103,9 @@ namespace Mitra.Services
                     //options.CallbackPath = "/signin-google";
                 });
 
-            
 
 
+            services.AddAuthentication();
             services.AddAuthorization();
 
 
