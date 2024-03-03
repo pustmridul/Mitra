@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -42,11 +43,13 @@ namespace Mitra.Services
                 options.AddPolicy("AllowAll",
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder.WithOrigins("http://localhost:4200")
                                .AllowAnyMethod()
                                .AllowAnyHeader();
                     });
             });
+
+            
 
             services.AddControllers();
 
@@ -78,9 +81,17 @@ namespace Mitra.Services
             //    });
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                //options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme ;
+                //options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                //----
+                //options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme; // Use Google as the default authentication challenge scheme
             })
                 .AddJwtBearer(options =>
                 {
@@ -92,20 +103,27 @@ namespace Mitra.Services
                         ValidateAudience = false
                     };
                 })
-               .AddCookie(options =>
-               {
-                   options.LoginPath = "/account/google-login";
-               })
+                //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie("cookie", options =>
+                {
+                    //...
+
+                    // `SameSite=Strict` only works for SPA apps where
+                    // initial "catch-all" `index.html` page is not secured.
+                    options.Cookie.SameSite = SameSiteMode.Lax;
+                })
                 .AddGoogle(options =>
                 {
                     options.ClientId = "826276899262-vn0q0vi9f5of7jhtsau3bjm96m2ttbmv.apps.googleusercontent.com";
                     options.ClientSecret = "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";
-                    //options.CallbackPath = "/signin-google";
+                    options.CallbackPath = "/signin-google";
                 });
+            services.AddControllersWithViews();
 
 
 
             services.AddAuthentication();
+
             services.AddAuthorization();
 
 

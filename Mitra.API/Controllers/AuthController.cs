@@ -13,11 +13,13 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Mitra.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowAll")]
     public class AuthController : ControllerBase
     {
         private ResponseDto _rsponseDTO;
@@ -74,41 +76,70 @@ namespace Mitra.API.Controllers
             return Ok(token);
 
         }
-
-        [HttpGet("signin-google")]
-        public IActionResult GoogleSignIn()
+        [HttpGet("google-login")] // Using HttpGet for clarity
+        public IActionResult GoogleLogin()
         {
-            try
-            {
-                var properties = new AuthenticationProperties
-                {
-                    RedirectUri = "/auth/google-callback" // Callback endpoint
-                };
-                return Challenge(properties, GoogleDefaults.AuthenticationScheme);
-            }catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            
+            var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse") };
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
-        [HttpGet("google-callback")]
-        public async Task<IActionResult> GoogleCallback()
+        [HttpGet("google-response")] // Using HttpGet for clarity
+        public async Task<ActionResult> GoogleResponse()
         {
-            var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            if (!authenticateResult.Succeeded)
+            if (result?.Principal == null)
             {
-                return BadRequest("Failed to authenticate with Google.");
+                return Unauthorized(); // Return 401 Unauthorized if not authenticated
             }
 
-            var email = authenticateResult.Principal.FindFirstValue(ClaimTypes.Email);
-            var name = authenticateResult.Principal.FindFirstValue(ClaimTypes.Name);
+            var claims = result.Principal.Identities.FirstOrDefault()?.Claims.Select(claim => new
+            {
+                claim.Issuer,
+                claim.OriginalIssuer,
+                claim.Type,
+                claim.Value
+            });
 
-            // Further processing - create user account, sign in, etc.
-
-            return Ok(new { Email = email, Name = name });
+            return Ok(claims);
         }
+
+
+
+        //[HttpGet("signin-google")]
+        //public IActionResult GoogleSignIn()
+        //{
+        //    try
+        //    {
+        //        var properties = new AuthenticationProperties
+        //        {
+        //            RedirectUri = "/auth/google-callback" // Callback endpoint
+        //        };
+        //        return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+        //    }catch(Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+
+        //}
+
+        //[HttpGet("google-callback")]
+        //public async Task<IActionResult> GoogleCallback()
+        //{
+        //    var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+
+        //    if (!authenticateResult.Succeeded)
+        //    {
+        //        return BadRequest("Failed to authenticate with Google.");
+        //    }
+
+        //    var email = authenticateResult.Principal.FindFirstValue(ClaimTypes.Email);
+        //    var name = authenticateResult.Principal.FindFirstValue(ClaimTypes.Name);
+
+        //    // Further processing - create user account, sign in, etc.
+
+        //    return Ok(new { Email = email, Name = name });
+        //}
 
         //[HttpGet("google-login")]
         //public IActionResult GoogleLogin(string returnUrl = "/")

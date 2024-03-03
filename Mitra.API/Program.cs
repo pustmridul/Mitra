@@ -31,6 +31,8 @@ if (app.Environment.IsDevelopment())
 {
    
 }
+app.UseCors("AllowAll");       
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -38,9 +40,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
+//app.UseRouting();
 app.MapControllers();
-app.UseCors("AllowAnyOrigin");
 
 
 app.Run();
