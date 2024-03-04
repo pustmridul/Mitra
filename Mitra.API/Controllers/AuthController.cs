@@ -76,33 +76,55 @@ namespace Mitra.API.Controllers
             return Ok(token);
 
         }
-        [HttpGet("google-login")] // Using HttpGet for clarity
-        public IActionResult GoogleLogin()
+
+
+        [HttpGet("login")]
+        public IActionResult Login()
         {
-            var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse") };
-            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+            var props = new AuthenticationProperties { RedirectUri = "Auth/signin-google" };
+            return Challenge(props, GoogleDefaults.AuthenticationScheme);
         }
-
-        [HttpGet("google-response")] // Using HttpGet for clarity
-        public async Task<ActionResult> GoogleResponse()
+        [HttpGet("signin-google")]
+        public async Task<IActionResult> GoogleLogin()
         {
-            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var response = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            if (response.Principal == null) return BadRequest();
 
-            if (result?.Principal == null)
-            {
-                return Unauthorized(); // Return 401 Unauthorized if not authenticated
-            }
+            var name = response.Principal.FindFirstValue(ClaimTypes.Name);
+            var givenName = response.Principal.FindFirstValue(ClaimTypes.GivenName);
+            var email = response.Principal.FindFirstValue(ClaimTypes.Email);
+            //Do something with the claims
+            // var user = await UserService.FindOrCreate(new { name, givenName, email});
 
-            var claims = result.Principal.Identities.FirstOrDefault()?.Claims.Select(claim => new
-            {
-                claim.Issuer,
-                claim.OriginalIssuer,
-                claim.Type,
-                claim.Value
-            });
-
-            return Ok(claims);
+            return Ok();
         }
+        //[HttpGet("google-login")] // Using HttpGet for clarity
+        //public IActionResult GoogleLogin()
+        //{
+        //    var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse") };
+        //    return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+        //}
+
+        //[HttpGet("google-response")] // Using HttpGet for clarity
+        //public async Task<ActionResult> GoogleResponse()
+        //{
+        //    var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        //    if (result?.Principal == null)
+        //    {
+        //        return Unauthorized(); // Return 401 Unauthorized if not authenticated
+        //    }
+
+        //    var claims = result.Principal.Identities.FirstOrDefault()?.Claims.Select(claim => new
+        //    {
+        //        claim.Issuer,
+        //        claim.OriginalIssuer,
+        //        claim.Type,
+        //        claim.Value
+        //    });
+
+        //    return Ok(claims);
+        //}
 
 
 

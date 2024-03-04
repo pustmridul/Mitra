@@ -87,10 +87,10 @@ namespace Mitra.Services
                 //options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme ;
                 //options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
                 //----
-                //options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 //options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.defaultauthenticatescheme = cookieauthenticationdefaults.authenticationscheme;
+                //options.defaultsigninscheme = cookieauthenticationdefaults.authenticationscheme;
                 options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme; // Use Google as the default authentication challenge scheme
             })
                 .AddJwtBearer(options =>
@@ -104,19 +104,12 @@ namespace Mitra.Services
                     };
                 })
                 //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie("cookie", options =>
-                {
-                    //...
-
-                    // `SameSite=Strict` only works for SPA apps where
-                    // initial "catch-all" `index.html` page is not secured.
-                    options.Cookie.SameSite = SameSiteMode.Lax;
-                })
+                .AddCookie()
                 .AddGoogle(options =>
                 {
                     options.ClientId = "826276899262-vn0q0vi9f5of7jhtsau3bjm96m2ttbmv.apps.googleusercontent.com";
                     options.ClientSecret = "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";
-                    options.CallbackPath = "/signin-google";
+                    //options.CallbackPath = "/signin-google";
                 });
             services.AddControllersWithViews();
 
